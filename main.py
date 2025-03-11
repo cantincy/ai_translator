@@ -1,6 +1,5 @@
 import streamlit
 import streamlit as st
-from langchain.chains.llm import LLMChain
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
@@ -26,12 +25,7 @@ def get_chain():
 
     parser = StrOutputParser()
 
-    chain = LLMChain(
-        llm=llm,
-        prompt=prompt,
-        output_parser=parser,
-        verbose=True
-    )
+    chain = prompt | llm | parser
 
     return chain
 
@@ -67,7 +61,7 @@ def main():
                     "original_language": original_language,
                     "target_language": target_language,
                     "input": user_input,
-                })["text"]
+                })
 
             st.session_state.target_text = res
             st.rerun()
